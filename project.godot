@@ -11,5 +11,16 @@ config_version=5
 [application]
 
 config/name="OpenXR_Project_V0.0.1"
+run/main_scene="uid://drx0luvvjx1vd"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+
+[xr]
+
+openxr/enabled=true
+shaders/enabled=true
