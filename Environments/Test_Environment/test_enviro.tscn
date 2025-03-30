@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://drx0luvvjx1vd"]
+[gd_scene load_steps=16 format=3 uid="uid://drx0luvvjx1vd"]
 
 [ext_resource type="PackedScene" uid="uid://b3210gbcqcnpi" path="res://Player Controller/xr_origin.tscn" id="1_c2kh5"]
 [ext_resource type="Script" uid="uid://gp6vskuylxt0" path="res://Environments/Test_Environment/main.gd" id="1_uyssq"]
-[ext_resource type="Texture2D" uid="uid://tjw86g6p2onx" path="res://Textures/rocky_trail_02_4k/textures/rocky_trail_02_diff_4k.png" id="2_d7nap"]
-[ext_resource type="Texture2D" uid="uid://bfbp58jk7epft" path="res://Textures/rocky_trail_02_4k/textures/rocky_trail_02_nor_gl_4k.png" id="3_1bt6p"]
-[ext_resource type="Texture2D" uid="uid://tlch7emm4trj" path="res://Textures/rocky_trail_02_4k/textures/rocky_trail_02_rough_4k.png" id="4_k8jr4"]
+[ext_resource type="Texture2D" uid="uid://bpab0j8q2x5fm" path="res://Textures/rock_face_03_4k/textures/rock_face_03_diff_4k.png" id="2_1bt6p"]
+[ext_resource type="Texture2D" uid="uid://b2qeui13kfx4i" path="res://Textures/rock_face_03_4k/textures/rock_face_03_disp_4k.png" id="3_k8jr4"]
+[ext_resource type="Texture2D" uid="uid://cyskyxogl1xdr" path="res://Textures/rock_face_03_4k/textures/rock_face_03_nor_gl_4k.png" id="4_wypjh"]
+[ext_resource type="Texture2D" uid="uid://behmbww5indjt" path="res://Textures/rock_face_03_4k/textures/rock_face_03_rough_4k.png" id="5_7pbbx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_udlxn"]
 sky_top_color = Color(0.384929, 0.453922, 0.549915, 1)
@@ -23,14 +24,38 @@ tonemap_mode = 2
 ssao_enabled = true
 glow_enabled = true
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_334jc"]
+size = Vector3(10, 20, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u3ooo"]
+albedo_texture = ExtResource("2_1bt6p")
+roughness_texture = ExtResource("5_7pbbx")
+normal_enabled = true
+normal_texture = ExtResource("4_wypjh")
+heightmap_enabled = true
+heightmap_scale = 1.0
+heightmap_texture = ExtResource("3_k8jr4")
+
+[sub_resource type="BoxMesh" id="BoxMesh_si63p"]
+material = SubResource("StandardMaterial3D_u3ooo")
+size = Vector3(10, 20, 10)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_n8rkq"]
 size = Vector3(100, 0.25, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wypjh"]
-albedo_texture = ExtResource("2_d7nap")
-roughness_texture = ExtResource("4_k8jr4")
+albedo_texture = ExtResource("2_1bt6p")
+metallic_specular = 0.16
+roughness_texture = ExtResource("5_7pbbx")
 normal_enabled = true
-normal_texture = ExtResource("3_1bt6p")
+normal_scale = 1.24
+normal_texture = ExtResource("4_wypjh")
+heightmap_enabled = true
+heightmap_scale = 1.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("3_k8jr4")
 uv1_scale = Vector3(35, 35, 35)
 
 [sub_resource type="BoxMesh" id="BoxMesh_c2kh5"]
@@ -48,13 +73,35 @@ transform = Transform3D(-0.866023, -0.427684, 0.259017, 0, 0.51803, 0.855362, -0
 light_energy = 1.45
 directional_shadow_max_distance = 159.0
 
-[node name="Floor" type="StaticBody3D" parent="."]
+[node name="XROrigin3D" parent="." instance=ExtResource("1_c2kh5")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+[node name="WorldObjects" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.7369, 0, -40.5396)
+
+[node name="Tower2" type="StaticBody3D" parent="WorldObjects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.79413, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldObjects/Tower2"]
+shape = SubResource("BoxShape3D_334jc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldObjects/Tower2/CollisionShape3D"]
+mesh = SubResource("BoxMesh_si63p")
+
+[node name="Tower1" type="StaticBody3D" parent="WorldObjects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76.542, 6.62076, 76.8744)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldObjects/Tower1"]
+shape = SubResource("BoxShape3D_334jc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldObjects/Tower1/CollisionShape3D"]
+mesh = SubResource("BoxMesh_si63p")
+
+[node name="Floor" type="StaticBody3D" parent="WorldObjects"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.7369, 0, 40.5396)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldObjects/Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.125, 0)
 shape = SubResource("BoxShape3D_n8rkq")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/CollisionShape3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldObjects/Floor/CollisionShape3D"]
 mesh = SubResource("BoxMesh_c2kh5")
-
-[node name="XROrigin3D" parent="." instance=ExtResource("1_c2kh5")]
