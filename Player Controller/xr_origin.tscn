@@ -1,15 +1,31 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3210gbcqcnpi"]
+[gd_scene load_steps=8 format=3 uid="uid://b3210gbcqcnpi"]
 
 [ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_jw5w6"]
+[ext_resource type="Script" uid="uid://bb1fv07ppdq2y" path="res://Player Controller/PlayerMovement.gd" id="1_n7h5y"]
 [ext_resource type="PackedScene" uid="uid://bl2nuu3qhlb5k" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="2_eoto6"]
 [ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="2_rturn"]
 [ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_7abtg"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="4_f1qq5"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="4_nws3r"]
 
 [node name="XROrigin3D" type="XROrigin3D"]
 current = true
+script = ExtResource("1_n7h5y")
+left_hand_path = NodePath("LeftHand")
+right_hand_path = NodePath("RightHand")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="."]
+
+[node name="RightHand" type="XRController3D" parent="."]
+tracker = &"right_hand"
+
+[node name="RightHand" parent="RightHand" instance=ExtResource("2_rturn")]
+
+[node name="MovementTurn" parent="RightHand" instance=ExtResource("4_f1qq5")]
+turn_mode = 2
+
+[node name="FunctionPickup" parent="RightHand" instance=ExtResource("4_nws3r")]
+action_button_action = "grip_click"
 
 [node name="LeftHand" type="XRController3D" parent="."]
 tracker = &"left_hand"
@@ -19,12 +35,7 @@ tracker = &"left_hand"
 [node name="MovementDirect" parent="LeftHand" instance=ExtResource("2_eoto6")]
 strafe = true
 
-[node name="RightHand" type="XRController3D" parent="."]
-tracker = &"right_hand"
-
-[node name="RightHand" parent="RightHand" instance=ExtResource("2_rturn")]
-
-[node name="MovementTurn" parent="RightHand" instance=ExtResource("4_f1qq5")]
-turn_mode = 2
+[node name="FunctionPickup" parent="LeftHand" instance=ExtResource("4_nws3r")]
+action_button_action = "grip_click"
 
 [node name="PlayerBody" parent="." instance=ExtResource("4_7abtg")]
